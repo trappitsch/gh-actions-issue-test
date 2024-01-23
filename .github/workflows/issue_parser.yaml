@@ -1,0 +1,28 @@
+# A github workflow that will trigger when a new issue is created or edited.
+# It runs on the latest ubuntu image, and uses the `python/setup-python` action to setup python 3.12.
+# The workflow should accomodate the following
+#   1. Check out the local repository using `actions/checkout@v2`
+#   2. Setup python 3.12 using `python/setup-python@v2`
+#   3. Install the local package with pip (`pip install .`)
+#   4. Echo the title of the issue to the workflow log
+#   4. Run the issue parser in python (`ghactmod.run(value: str)`), where `value` is the issue body
+
+name: Issue Parser
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: python/setup-python@v2
+        with:
+          python-version: "3.12"
+      - run: pip install .
+      - run: echo ${{ github.event.issue.title }}
+      - name: Run the issue parser
+        run: |
+          python -c "import ghactmod; ghactmod.run(value='${{ github.event.issue.body }}')"
