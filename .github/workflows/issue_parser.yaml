@@ -25,4 +25,4 @@ jobs:
       - run: echo ${{ github.event.issue.title }}
       - name: Run the issue parser
         run: |
-          python -c "import ghactmod; ghactmod.run(value='${{ github.event.issue.body }}')"
+          python -c "import ghactmod; ghactmod.run('${{ github.event.issue.body }}')"
